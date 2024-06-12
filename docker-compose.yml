@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: homework
+      POSTGRES_USER: homework
+      POSTGRES_PASSWORD: hw001
+    ports:
+      - "5432:5432"
