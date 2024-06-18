@@ -11,7 +11,8 @@ class PostService {
     try {
       return await this.postRepository.createPost(data);
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 
@@ -19,18 +20,20 @@ class PostService {
     try {
       return await this.postRepository.getAllPosts();
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 
-  async getPostByIdWithComment(postId) {
+  async getPostByIdWithComments(postId) {
     try {
-      const post = await this.postRepository.getPostByID(postId);
+      const post = await this.postRepository.getPostById(postId);
       post.comments =
         await this.commentRepository.getAllCommentsByPostId(postId);
       return post;
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 
@@ -38,7 +41,8 @@ class PostService {
     try {
       return await this.postRepository.deletePost(postId);
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 
@@ -54,7 +58,8 @@ class PostService {
         return updatedPostInstance;
       }
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 }

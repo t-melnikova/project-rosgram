@@ -6,51 +6,56 @@ class CommentController {
     this.service = service;
   }
   createComment = async (req, res) => {
-    const data = req.body;
-    const comment = await this.service.createComment(data);
-    if (comment === "An error occurred") {
-      res.status(500).json("Failed to create a comment");
+    try {
+      const data = req.body;
+      const comment = await this.service.createComment(data);
+      res.status(201).json(comment);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create a comment" });
     }
-    res.status(201).json(comment);
   };
 
   getCommentById = async (req, res) => {
-    const { id } = req.param;
-    const comment = await this.service.getCommentById(id);
-    if (comment === "An error occurred") {
-      res.status(400).json("Could not find a comment with such id");
+    try {
+      const { id } = req.param;
+      const comment = await this.service.getCommentById(id);
+      res.status(200).json(comment);
+    } catch (error) {
+      res.status(400).json({ error: "Could not find a comment with such id" });
     }
-    res.status(200).json(comment);
   };
 
   getAllComments = async (req, res) => {
-    const comment = await this.service.getAllComments();
-    if (comment === "An error occurred") {
-      res.status(500).json("Unable to find comments");
+    try {
+      const comment = await this.service.getAllComments();
+      res.status(200).json(comment);
+    } catch (error) {
+      res.status(500).json({ error: "Unable to find comments" });
     }
-    res.status(200).json(comment);
   };
 
   updateCommentById = async (req, res) => {
-    const commentId = req.params.id;
-    const updatedComment = req.body;
-    const comment = await this.service.updateCommentById(
-      updatedComment,
-      commentId,
-    );
-    if (comment === "An error occurred") {
-      res.status(500).json("Failed to update the comment");
+    try {
+      const commentId = req.params.id;
+      const updatedComment = req.body;
+      const comment = await this.service.updateCommentById(
+        updatedComment,
+        commentId,
+      );
+      res.status(200).json(comment);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update the comment" });
     }
-    res.status(200).json(comment);
   };
 
   deleteComment = async (req, res) => {
-    const commentId = req.params.id;
-    const comment = await this.service.deleteComment(commentId);
-    if (comment === "An error occurred") {
+    try {
+      const commentId = req.params.id;
+      const comment = await this.service.deleteComment(commentId);
+      res.json(comment);
+    } catch (error) {
       return res.status(404).json({ error: "Comment not found" });
     }
-    res.json(comment);
   };
 }
 

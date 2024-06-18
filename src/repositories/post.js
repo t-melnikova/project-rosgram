@@ -8,7 +8,7 @@ class PostRepository {
   async getAllPosts() {
     return await this.postModel.findAll();
   }
-  async getPostByID(postId) {
+  async getPostById(postId) {
     return await this.postModel.findByPk(postId);
   }
 

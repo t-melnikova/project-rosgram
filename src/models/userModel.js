@@ -2,11 +2,11 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../sequelize");
 
 const user = sequelize.define("user", {
-  // id: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   primaryKey: true,
-  // },
+  id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true,
+  },
   username: {
     type: DataTypes.STRING,
     allowNull: false,

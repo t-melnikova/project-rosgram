@@ -1,4 +1,15 @@
 const userRepository = require("../repositories/user");
+const { validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { secret } = require("../config");
+const generateAccessToken = (username, roles) => {
+  const payload = {
+    username,
+    roles,
+  };
+  return jwt.sign(payload, secret, { expiresIn: "24h" });
+};
 class UserService {
   constructor(userRepository) {
     this.userRepository = userRepository;
@@ -9,7 +20,8 @@ class UserService {
     try {
       return await this.userRepository.createUser(data);
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 
@@ -17,7 +29,8 @@ class UserService {
     try {
       return await this.userRepository.getAllUsers();
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 
@@ -25,18 +38,10 @@ class UserService {
     try {
       return await this.userRepository.getUserById(id);
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
-
-  async deleteUser(userId) {
-    try {
-      return await this.userRepository.deleteUser(userId);
-    } catch (error) {
-      return this.errorMessage;
-    }
-  }
-
   async updateUserById(updatedUser, userId) {
     try {
       const result = await this.userRepository.updateUserById(
@@ -49,7 +54,47 @@ class UserService {
         return updatedUserInstance;
       }
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
+    }
+  }
+  async deleteUser(userId) {
+    try {
+      return await this.userRepository.deleteUser(userId);
+    } catch (error) {
+      console.log(error);
+      throw this.errorMessage;
+    }
+  }
+  async findUser(username) {
+    try {
+      return await this.userRepository.findUser(username);
+    } catch (error) {
+      console.log(error);
+      throw this.errorMessage;
+    }
+  }
+
+  async registration(username, password) {
+    try {
+      const hashPassword = bcrypt.hashSync(password, 7);
+      return await this.userRepository.registration({
+        username,
+        password: hashPassword,
+      });
+    } catch (error) {
+      console.log(error);
+      throw this.errorMessage;
+    }
+  }
+
+  async login(user) {
+    try {
+      const token = generateAccessToken(user.username, user.roles);
+      return { token };
+    } catch (error) {
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 }

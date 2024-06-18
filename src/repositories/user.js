@@ -1,4 +1,5 @@
 const userModel = require("../models/userModel");
+const bcrypt = require("bcryptjs");
 
 class UserRepository {
   constructor(userModel) {
@@ -26,6 +27,16 @@ class UserRepository {
 
   async deleteUser(userId) {
     return this.userModel.destroy({ where: { id: userId } });
+  }
+  async findUser(username) {
+    return this.userModel.findOne({
+      where: { username: username },
+    });
+  }
+  async registration(username, password, hashPassword) {
+    const user = new userModel({ username, password: hashPassword });
+    await user.save();
+    return user;
   }
 }
 

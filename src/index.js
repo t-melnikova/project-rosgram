@@ -3,7 +3,6 @@ const sequelize = require("./sequelize");
 const commentsRouter = require("./routers/comment");
 const postsRouter = require("./routers/post");
 const userRouter = require("./routers/user");
-const authRouter = require("./routers/auth");
 
 const index = express();
 index.use(express.json());
@@ -30,7 +29,6 @@ startServer()
     index.use("/api/v1/comments", commentsRouter);
     index.use("/api/v1/posts", postsRouter);
     index.use("/api/v1/users", userRouter);
-    index.use("/api/v1/auth", authRouter);
   })
   .catch((error) => {
     console.error("Ошибка при старте сервера:", error);

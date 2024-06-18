@@ -9,7 +9,8 @@ class CommentService {
     try {
       return await this.commentRepository.createComment(data);
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 
@@ -17,7 +18,8 @@ class CommentService {
     try {
       return await this.commentRepository.getAllComments();
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 
@@ -25,7 +27,8 @@ class CommentService {
     try {
       return await this.commentRepository.getCommentById(id);
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 
@@ -33,7 +36,8 @@ class CommentService {
     try {
       return await this.commentRepository.deleteComment(commentId);
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 
@@ -49,7 +53,8 @@ class CommentService {
         return updatedCommentInstance;
       }
     } catch (error) {
-      return this.errorMessage;
+      console.log(error);
+      throw this.errorMessage;
     }
   }
 }

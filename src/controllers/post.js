@@ -7,48 +7,53 @@ class PostController {
   }
 
   createPost = async (req, res) => {
-    const data = req.body;
-    const post = await this.service.createPost(data);
-    if (post === "An error occurred") {
-      res.status(500).json("Failed to create a post");
+    try {
+      const data = req.body;
+      const post = await this.service.createPost(data);
+      res.status(201).json(post);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create a post" });
     }
-    res.status(201).json(post);
   };
 
   getAllPosts = async (req, res) => {
-    const post = await this.service.getAllPosts();
-    if (post === "An error occurred") {
-      res.status(500).json("Unable to find posts");
+    try {
+      const post = await this.service.getAllPosts();
+      res.status(200).json(post);
+    } catch (error) {
+      res.status(500).json({ error: "Unable to find posts" });
     }
-    res.status(200).json(post);
   };
 
   getPostByIdWithComment = async (req, res) => {
-    const { postId } = req.params;
-    const post = await this.service.getPostByIdWithComment(postId);
-    if (post === "An error occurred") {
-      res.status(400).json("Could not find a post with such id");
+    try {
+      const { postId } = req.params;
+      const post = await this.service.getPostByIdWithComments(postId);
+      res.status(200).json(post);
+    } catch (error) {
+      res.status(400).json({ error: "Could not find a post with such id" });
     }
-    res.status(200).json(post);
   };
 
   updatePostById = async (req, res) => {
-    const postId = req.params.id;
-    const updatedPost = req.body;
-    const post = await this.service.updatePostById(updatedPost, postId);
-    if (post === "An error occurred") {
-      res.status(500).json("Failed to update the post");
+    try {
+      const postId = req.params.id;
+      const updatedPost = req.body;
+      const post = await this.service.updatePostById(updatedPost, postId);
+      res.status(200).json(post);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update the post" });
     }
-    res.status(200).json(post);
   };
 
   deletePost = async (req, res) => {
-    const { postId } = req.params;
-    const post = await this.service.deletePost(postId);
-    if (post === "An error occurred") {
+    try {
+      const { postId } = req.params;
+      const post = await this.service.deletePost(postId);
+      res.json(post);
+    } catch (error) {
       return res.status(404).json({ error: "Post not found" });
     }
-    res.json(post);
   };
 }
 module.exports = new PostController(postService);
