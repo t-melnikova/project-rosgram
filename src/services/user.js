@@ -3,10 +3,9 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { secret } = require("../config");
-const generateAccessToken = (username, roles) => {
+const generateAccessToken = (username) => {
   const payload = {
     username,
-    roles,
   };
   return jwt.sign(payload, secret, { expiresIn: "24h" });
 };
@@ -90,7 +89,7 @@ class UserService {
 
   async login(user) {
     try {
-      const token = generateAccessToken(user.username, user.roles);
+      const token = generateAccessToken(user.username);
       return { token };
     } catch (error) {
       console.log(error);
