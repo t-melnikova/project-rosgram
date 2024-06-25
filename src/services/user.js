@@ -3,15 +3,12 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { secret } = require("../config");
-const generateAccessToken = (username) => {
-  const payload = {
-    username,
-  };
-  return jwt.sign(payload, secret, { expiresIn: "24h" });
-};
+const authService = require("./auth");
+
 class UserService {
-  constructor(userRepository) {
+  constructor(userRepository, authService) {
     this.userRepository = userRepository;
+    this.authService = authService;
     this.errorMessage = "An error occurred";
   }
 
@@ -77,10 +74,7 @@ class UserService {
   async registration(username, password) {
     try {
       const hashPassword = bcrypt.hashSync(password, 7);
-      return await this.userRepository.registration({
-        username,
-        password: hashPassword,
-      });
+      return await this.userRepository.createUser(username, hashPassword);
     } catch (error) {
       console.log(error);
       throw this.errorMessage;
@@ -89,7 +83,7 @@ class UserService {
 
   async login(user) {
     try {
-      const token = generateAccessToken(user.username);
+      const token = this.authService.generateAccessToken(user.username);
       return { token };
     } catch (error) {
       console.log(error);

@@ -6,8 +6,8 @@ class UserRepository {
     this.userModel = userModel;
   }
 
-  async createUser(data) {
-    return this.userModel.create(data);
+  async createUser(username, hashPassword) {
+    return this.userModel.create({ username, password: hashPassword });
   }
 
   async getAllUsers() {
@@ -33,10 +33,16 @@ class UserRepository {
       where: { username: username },
     });
   }
-  async registration(username, password, hashPassword) {
-    const user = new userModel({ username, password: hashPassword });
-    await user.save();
-    return user;
+
+  async setAccessToken(userId, token) {
+    const user = await this.userModel.findByPk(userId);
+    user.tokens.accessToken = token;
+    await user.changed("tokens", true);
+    user.save();
+  }
+  async getTokens(userId) {
+    const user = await this.userModel.findByPk(userId);
+    return user.tokens;
   }
 }
 
