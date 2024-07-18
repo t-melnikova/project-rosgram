@@ -16,6 +16,10 @@ const user = sequelize.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  tokens: {
+    type: DataTypes.JSONB,
+    defaultValue: {},
+  },
 });
 
 module.exports = user;
